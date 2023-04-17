@@ -30,11 +30,11 @@ app.get("/api/hello", function (req, res) {
 // timestamp of the input date in milliseconds (as type Number)
 
 app.get('/api/:date?', (req, res) => {
+
   const { date } = req.params;
-  res.json({unix: date})
+  const timestamp = new Date(date).toString();
+  res.json({unix: date, utc: timestamp})
 })
-
-
 
 
 // listen for requests :)
