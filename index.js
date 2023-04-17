@@ -18,22 +18,12 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
-});
-
-
-// [ ] A request to /api/:date? with a valid date should 
-// return a JSON object with a unix key that is a Unix 
-// timestamp of the input date in milliseconds (as type Number)
-
 app.get('/api/:date?', (req, res) => {
 
   const { date } = req.params;
-  const timestamp = new Date(date).toUTCString();
-  res.json({unix: date, utc: timestamp})
+  const timestamp = + new Date(date);
+  const dateformat = new Date(date).toUTCString();
+  res.json({unix: timestamp, utc: dateformat})
 })
 
 
