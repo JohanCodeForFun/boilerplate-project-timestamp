@@ -32,7 +32,7 @@ app.get("/api/hello", function (req, res) {
 app.get('/api/:date?', (req, res) => {
 
   const { date } = req.params;
-  const timestamp = new Date(date).toString();
+  const timestamp = new Date(date).toUTCString();
   res.json({unix: date, utc: timestamp})
 })
 
