@@ -25,6 +25,17 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+// [ ] A request to /api/:date? with a valid date should 
+// return a JSON object with a unix key that is a Unix 
+// timestamp of the input date in milliseconds (as type Number)
+
+app.get('/api/:date?', (req, res) => {
+  const { date } = req.params;
+  res.json({unix: date})
+})
+
+
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
