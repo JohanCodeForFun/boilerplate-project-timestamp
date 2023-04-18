@@ -19,10 +19,16 @@ app.get("/", function (req, res) {
 });
 
 app.get('/api/:date?', (req, res) => {
+  const { queryParam } = req.params;
 
-  const { date } = req.params;
-  const timestamp = + new Date(date);
-  const dateformat = new Date(date).toUTCString();
+  // create reqex for date, timestamp or else
+  // example,[dddd-dd-dd], [d13], else...
+  // match timestamp, /\d{13}/g
+  // match date, /\d{4}-\d{2}-\d{2}/g
+  // else ... return { error : "Invalid Date" }
+
+  const timestamp = + new Date(queryParam);
+  const dateformat = new Date(queryParam).toUTCString();
   res.json({unix: timestamp, utc: dateformat})
 })
 
