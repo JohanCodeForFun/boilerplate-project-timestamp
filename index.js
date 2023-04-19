@@ -19,7 +19,22 @@ app.get("/", function (req, res) {
 });
 
 app.get('/api/:date?', (req, res) => {
-  const { queryParam } = req.params;
+  const queryParam = req.params;
+
+  let timestampPattern = /\d{13}/g;
+  let datePattern = /\d{4}-\d{2}-\d{2}/g;
+
+  console.log(queryParam.date)
+  console.log(timestampPattern.test(queryParam.date))
+  console.log(datePattern.test(queryParam.date))
+
+  if (timestampPattern.test(queryParam.date)) {
+    console.log("timestamp pattern")
+  } else if (datePattern.test(queryParam.date)) {
+    console.log("date pattern")
+  } else {
+    console.log({ error : "Invalid Date" });
+  }
 
   // create reqex for date, timestamp or else
   // example,[dddd-dd-dd], [d13], else...
