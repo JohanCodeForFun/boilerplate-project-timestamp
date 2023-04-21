@@ -22,25 +22,32 @@ app.get("/", function (req, res) {
 // Passed: You should provide your own project, not the example URL.
 // Passed: A request to /api/:date? with a valid date should return a JSON object with a unix key that is a Unix timestamp of the input date in milliseconds (as type Number)
 // Passed: A request to /api/:date? with a valid date should return a JSON object with a utc key that is a string of the input date in the format: Thu, 01 Jan 1970 00:00:00 GMT
-// Failed: A request to /api/1451001600000 should return { unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }
-// Failed: Your project can handle dates that can be successfully parsed by new Date(date_string)
 // Passed: If the input date string is invalid, the API returns an object having the structure { error : "Invalid Date" }
+// Passed: A request to /api/1451001600000 should return { unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }
+// Failed: Your project can handle dates that can be successfully parsed by new Date(date_string)
 // Failed: An empty date parameter should return the current time in a JSON object with a unix key
 // Failed: An empty date parameter should return the current time in a JSON object with a utc key
 
 app.get('/api/:date?', (req, res) => {
-  const queryParam = req.params;
+  const queryParam = req.params.date;
+  console.log(queryParam)
 
-  const timestamp = + new Date(queryParam.date);
-  const dateformat = new Date(queryParam.date).toUTCString();
+  const timestamp = + new Date(queryParam);
+  const dateformat = new Date(queryParam).toUTCString();
 
   let timestampPattern = /\d{13}/g;
   let datePattern = /\d{4}-\d{2}-\d{2}/g;
 
-  if (timestampPattern.test(queryParam.date)) {
-    res.json({unix: timestamp, utc: dateformat})
-    console.log("timestamp pattern")
-  } else if (datePattern.test(queryParam.date)) {
+  if (queryParam === undefined) {
+    // console.log(new Date.now(), new Date.toUTCString())
+    // res.json({unix: + new Date.now(), utc: new Date.toUTCString()})
+  }
+
+  if (timestampPattern.test(queryParam)) {
+    const unixTimestamp = parseInt(queryParam);
+    const realDate = new Date(unixTimestamp).toUTCString();
+    res.json({unix: unixTimestamp, utc: realDate})
+  } else if (datePattern.test(queryParam)) {
     res.json({unix: timestamp, utc: dateformat})
   } else {
     res.json({ error : "Invalid Date" });
