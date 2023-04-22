@@ -39,8 +39,7 @@ app.get('/api/:date?', (req, res) => {
   let datePattern = /\d{4}-\d{2}-\d{2}/g;
 
   if (queryParam === undefined) {
-    // console.log(new Date.now(), new Date.toUTCString())
-    // res.json({unix: + new Date.now(), utc: new Date.toUTCString()})
+    res.json({unix: + new Date(), utc: new Date().toUTCString()})
   }
 
   if (timestampPattern.test(queryParam)) {
