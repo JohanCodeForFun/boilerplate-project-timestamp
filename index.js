@@ -28,6 +28,10 @@ app.get("/", function (req, res) {
 // Failed: An empty date parameter should return the current time in a JSON object with a unix key
 // Failed: An empty date parameter should return the current time in a JSON object with a utc key
 
+app.get('/api/', (req, res) => {
+  res.json({unix: + new Date(), utc: new Date().toUTCString()})
+})
+
 app.get('/api/:date?', (req, res) => {
   const queryParam = req.params.date;
   console.log(queryParam)
@@ -37,18 +41,22 @@ app.get('/api/:date?', (req, res) => {
 
   let timestampPattern = /\d{13}/g;
   let datePattern = /\d{4}-\d{2}-\d{2}/g;
-
-  if (queryParam === undefined) {
-    res.json({unix: + new Date(), utc: new Date().toUTCString()})
-  }
+  let datePatternLong = /\d{2} \w{3,8} \d{4}, \w{3}/g;
 
   if (timestampPattern.test(queryParam)) {
     const unixTimestamp = parseInt(queryParam);
     const realDate = new Date(unixTimestamp).toUTCString();
     res.json({unix: unixTimestamp, utc: realDate})
-  } else if (datePattern.test(queryParam)) {
+  } else if (datePattern.test(queryParam) || (datePatternLong.test(queryParam))) {
     res.json({unix: timestamp, utc: dateformat})
-  } else {
+    console.log("datepattern long")
+  } else if (datePatternLong.test(queryParam)) {
+
+  }
+
+
+  if (!timestampPattern.test(queryParam) &&
+  !datePattern.test(queryParam)) {
     res.json({ error : "Invalid Date" });
   }
 });
